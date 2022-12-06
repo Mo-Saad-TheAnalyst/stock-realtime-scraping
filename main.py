@@ -91,6 +91,7 @@ def generate_payload(record:dict,partition_key):
     return payload
 
 if __name__ == '__main__':
+    debounce = 0
     while True and debounce < 5:
         try :
             records = asyncio.run(main(urls))
