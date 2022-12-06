@@ -91,7 +91,12 @@ def generate_payload(record:dict,partition_key):
     return payload
 
 if __name__ == '__main__':
-    while True:
-        records = asyncio.run(main(urls))
+    while True and debounce < 5:
+        try :
+            records = asyncio.run(main(urls))
+        except Exception as e:
+            debounce += 1
+            continue
+        debounce = 0
         response = client.put_records(Records=records,StreamName='stock-stream')
         print(response)
