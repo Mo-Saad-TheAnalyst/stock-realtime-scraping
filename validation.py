@@ -1,38 +1,38 @@
 from cerberus import Validator
-from cerberus import cerberus_error_handler
 
 schema = {
     'stock_name': {'type': 'string', 'required': True},
     'timestamp': {'type': 'string', 'required': True},
-    'regular_market_price': {'type': 'float', 'required': True},
-    'regular_market_change': {'type': 'float', 'required': True},
-    'regular_market_change_percent': {'type': 'float', 'required': True},
+    'regular_market_price': {'type': 'string', 'required': True},
+    'regular_market_change': {'type': 'string', 'required': True},
+    'regular_market_change_percent': {'type': 'string', 'required': True},
     'type': {'type': 'integer', 'required': True},
-    'PreviousClose': {'type': 'float', 'required': False},
-    'Open': {'type': 'float', 'required': False},
-    'DaysRangeUpper': {'type': 'float', 'required': False},
-    'DaysRangeLower': {'type': 'float', 'required': False},
-    '52WeekRangeUppe': {'type': 'float', 'required': False},
-    '52WeekRangeLower': {'type': 'float', 'required': False},
+    'PreviousClose': {'type': 'string', 'required': False},
+    'Open': {'type': 'string', 'required': False},
+    'DaysRangeUpper': {'type': 'string', 'required': False},
+    'DaysRangeLower': {'type': 'string', 'required': False},
+    '52WeekRangeUppe': {'type': 'string', 'required': False},
+    '52WeekRangeLower': {'type': 'string', 'required': False},
     'Algorithm': {'type': 'string', 'required': False},
     'MarketCap': {'type': 'string', 'required': False},
     'CirculatingSupply': {'type': 'string', 'required': False},
     'MaxSupply': {'type': 'string', 'required': False},
-    'Volume': {'type': 'integer', 'required': False},
+    'Volume': {'type': 'string', 'required': False},
     'Volume24hr': {'type': 'string', 'required': False},
-    'AvgVolume': {'type': 'integer', 'required': False},
+    'AvgVolume': {'type': 'string', 'required': False},
     'Volume24hrAllCurrencies': {'type': 'string', 'required': False},
     'PreSettlement': {'type': 'string', 'required': False},
-    'Bid': {'type': 'float', 'required': False},
-    'Ask': {'type': 'float', 'required': False},
-    'LastPrice': {'type': 'float', 'required': False},
+    'Bid': {'type': 'string', 'required': False},
+    'Ask': {'type': 'string', 'required': False},
+    'LastPrice': {'type': 'string', 'required': False},
 }
 
     
 def validate_input_data(data,schema = schema):
-    v = Validator(schema, allow_unknown=True, purge_unknown=True, error_handler=cerberus_error_handler)
+    v = Validator(schema, allow_unknown=True, purge_unknown=True)
     if v.validate(data):
         return v.document
     else:
+        print(v.document)
         raise ValueError(v.errors)
 
