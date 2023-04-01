@@ -1,4 +1,5 @@
-import cerberus
+from cerberus import Validator
+from cerberus import cerberus_error_handler
 
 schema = {
     'stock_name': {'type': 'string', 'required': True},
@@ -27,22 +28,11 @@ schema = {
     'LastPrice': {'type': 'float', 'required': False},
 }
 
-v = cerberus.Validator(schema)
+    
+def validate_input_data(data,schema = schema):
+    v = Validator(schema, allow_unknown=True, purge_unknown=True, error_handler=cerberus_error_handler)
+    if v.validate(data):
+        return v.document
+    else:
+        raise ValueError(v.errors)
 
-record_dict = {
-    'stock_name': 'AAPL',
-    'timestamp': '2022-04-01T10:00:00',
-    'regular_market_price': 144.72,
-    'regular_market_change': -1.23,
-    'regular_market_change_percent': -0.84,
-    'type': 0,
-    'PreviousClose': 1000.0,
-    'KeyMetric2': 2000.0,
-    'KeyMetric3': 3000.0,
-    'KeyMetric4': 4000.0,
-}
-
-if v.validate(record_dict):
-    print("Data is valid!")
-else:
-    print("Data is invalid:", v.errors)

@@ -5,6 +5,7 @@ import re
 import json
 from datetime import datetime
 import boto3 
+from validation import validate_input_data
 
 urls = [
 'https://finance.yahoo.com/quote/%5EDJI?p=%5EDJI',
@@ -38,6 +39,7 @@ async def extract_soup_fields(session,url):
     table_dict = clean_table_fields(table_dict)
     record_dict = upsert_table_fields(table_dict,record_dict)
     payload = generate_payload(record_dict,"stock_name")
+    payload = validate_input_data(payload)
     return payload
 
 def extract_general_info(soup,record_dict):
@@ -102,6 +104,7 @@ if __name__ == '__main__':
                 records = asyncio.run(main(urls))
             except Exception as e:
                 debounce += 1
+                print(e)
                 continue
             debounce = 0
             response = client.put_records(Records=records, StreamName='stock-stream')
