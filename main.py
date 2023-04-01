@@ -92,18 +92,16 @@ def generate_payload(record:dict,partition_key):
     return payload
 
 if __name__ == '__main__':
-    records = asyncio.run(main(urls))
-    print(records)
-    # with boto3.client('kinesis') as client:
-    #     debounce = 0
-    #     while True and debounce < 5:
-    #         try :
-    #             records = asyncio.run(main(urls))
-    #         except Exception as e:
-    #             debounce += 1
-    #             print(e)
-    #             continue
-    #         debounce = 0
-    #         response = client.put_records(Records=records, StreamName='stock-stream')
-    #         print(response)
+    client = boto3.client('kinesis')
+    debounce = 0
+    while True and debounce < 5:
+        try :
+            records = asyncio.run(main(urls))
+        except Exception as e:
+            debounce += 1
+            print(e)
+            continue
+        debounce = 0
+        response = client.put_records(Records=records, StreamName='stock-stream')
+        print(response)
 
