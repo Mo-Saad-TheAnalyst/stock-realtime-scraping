@@ -17,11 +17,6 @@ urls = [
 'https://finance.yahoo.com/quote/USDT-USD?p=USDT-USD',
 'https://finance.yahoo.com/quote/BNB-USD?p=BNB-USD']
 
-# client = boto3.client('kinesis')
-def write_stream(data):
-    with boto3.client('kinesis') as client:
-        response = client.put_records(Records=data, StreamName='stock-stream')
-        print(response)
         
 async def main(urls):
     session = AsyncHTMLSession()
