@@ -29,7 +29,7 @@ schema = {
 
     
 def validate_input_data(data,schema = schema):
-    v = Validator(schema, allow_unknown=True, purge_unknown=True)
+    v = Validator(schema, purge_unknown=True)
     if v.validate(data):
         return v.document
     else:
