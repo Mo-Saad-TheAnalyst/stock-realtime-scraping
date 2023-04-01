@@ -16,8 +16,12 @@ urls = [
 'https://finance.yahoo.com/quote/USDT-USD?p=USDT-USD',
 'https://finance.yahoo.com/quote/BNB-USD?p=BNB-USD']
 
-client = boto3.client('kinesis')
-
+# client = boto3.client('kinesis')
+def write_stream(data):
+    with boto3.client('kinesis') as client:
+        response = client.put_records(Records=data, StreamName='stock-stream')
+        print(response)
+        
 async def main(urls):
     session = AsyncHTMLSession()
     tasks = (extract_soup_fields(session,url) for url in urls)
@@ -91,13 +95,15 @@ def generate_payload(record:dict,partition_key):
     return payload
 
 if __name__ == '__main__':
-    debounce = 0
-    while True and debounce < 5:
-        try :
-            records = asyncio.run(main(urls))
-        except Exception as e:
-            debounce += 1
-            continue
+    with boto3.client('kinesis') as client:
         debounce = 0
-        response = client.put_records(Records=records,StreamName='stock-stream')
-        print(response)
+        while True and debounce < 5:
+            try :
+                records = asyncio.run(main(urls))
+            except Exception as e:
+                debounce += 1
+                continue
+            debounce = 0
+            response = client.put_records(Records=records, StreamName='stock-stream')
+            print(response)
+
